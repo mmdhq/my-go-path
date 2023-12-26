@@ -31,13 +31,26 @@ func Delete[T any](array []T, index int) ([]T, error) {
 }
 
 func rDelete[T any](array []T, args ...int) ([]T, error) {
-	if len(args) == 1 {
+	//if len(args) == 1 {
+	//	return Delete(array, args[0])
+	//}
+	//if args[0] < 0 || args[1] < 0 || args[1] >= len(array) || args[0] >= args[1] {
+	//	return array, errors.New("index out of range")
+	//}
+	//return append(array[:args[0]], array[args[1]+1:]...), nil
+	switch len(args) {
+	case 1:
 		return Delete(array, args[0])
+	case 2:
+		//为确定的array进行分配，当使用不定长参数的时候，使用switch
+		start, end := args[0], args[1]
+		if start < 0 || end < 0 || start > end || end >= len(array) {
+			return array, fmt.Errorf("invalid index range: start=%d, end=%d", start, end)
+		}
+		return append(array[:start], array[end+1:]...), nil
+	default:
+		return array, errors.New("require 1 or 2 arguments")
 	}
-	if args[0] < 0 || args[1] < 0 || args[1] >= len(array) || args[0] >= args[1] {
-		return array, errors.New("index out of range")
-	}
-	return append(array[:args[0]], array[args[1]+1:]...), nil
 
 }
 
