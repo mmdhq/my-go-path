@@ -27,8 +27,18 @@ func Delete[T any](array []T, index int) ([]T, error) {
 	if index < 0 || index >= len(array) {
 		return array, errors.New("index out of range")
 	}
-	newArray := append(array[:index], array[index+1:]...)
-	return newArray, nil
+	return append(array[:index], array[index+1:]...), nil
+}
+
+func rDelete[T any](array []T, args ...int) ([]T, error) {
+	if len(args) == 1 {
+		return Delete(array, args[0])
+	}
+	if args[0] < 0 || args[1] < 0 || args[1] >= len(array) || args[0] >= args[1] {
+		return array, errors.New("index out of range")
+	}
+	return append(array[:args[0]], array[args[1]+1:]...), nil
+
 }
 
 func main() {
@@ -44,9 +54,8 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Printf("s:%+v,len %d,cap %d\n", s, len(s), cap(s))
-	s, _ = Delete(s, 2)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	s, err = rDelete(s, 2, 3)
+	fmt.Println("err:", err)
 	fmt.Printf("s:%+v,len %d,cap %d\n", s, len(s), cap(s))
+
 }
