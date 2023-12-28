@@ -7,7 +7,7 @@ import (
 
 //多协程执行后使用channael收集结果,来源程序员在囧途
 
-func main() {
+func main2() {
 	megCh := make(chan any)
 	wg := &sync.WaitGroup{}
 	for i := 0; i < 10; i++ {
